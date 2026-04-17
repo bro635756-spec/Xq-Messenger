@@ -23,16 +23,3 @@ Bu yazılım, **T.C. Anayasası** ve uluslararası siber hukuk kurallarına tam 
 
 ---
 
-## 🛠️ Kurulum ve Entegrasyon
-Projenin çalışması için `index.html` dosyasındaki Firebase yapılandırmasını kendi anahtarlarınla güncelle:
-
-```javascript
-const firebaseConfig = {
-  apiKey: "AIzaSyBQdsC8VuoBnFyOLWavV3C8GXomSzDXUzw",
-  authDomain: "des-store-c93e0.firebaseapp.com",
-  databaseURL: "https://des-store-c93e0-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "des-store-c93e0",
-  storageBucket: "des-store-c93e0.firebasestorage.app",
-  messagingSenderId: "180864238268",
-  appId: "1:180864238268:web:7220a8a2496a7d622606b9"
-};
