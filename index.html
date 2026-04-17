@@ -2,170 +2,66 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XQ Messenger Ultra | Server Management</title>
+    <title>XQ Messenger | Email OTP Ultra</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --xq-bg: #090b10;
             --xq-side: #12161f;
-            --xq-card: #1c222d;
             --xq-primary: #5865f2;
             --xq-accent: #00d997;
-            --xq-danger: #ff4757;
             --xq-text: #f1f1f1;
-            --xq-text-dim: #949ba4;
             --xq-grad: linear-gradient(135deg, #5865f2 0%, #a052ff 100%);
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        * { box-sizing: border-box; font-family: 'Outfit', sans-serif; }
-        body, html { margin: 0; padding: 0; background: var(--xq-bg); color: var(--xq-text); height: 100vh; overflow: hidden; }
+        body { font-family: 'Outfit', sans-serif; background: var(--xq-bg); color: var(--xq-text); margin: 0; display: flex; height: 100vh; justify-content: center; align-items: center; }
 
-        /* --- AUTH SCREEN --- */
-        #auth-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--xq-bg); z-index: 9999; display: flex; align-items: center; justify-content: center;
-        }
         .auth-card {
-            background: var(--xq-side); padding: 40px; border-radius: 24px; width: 100%; max-width: 420px;
+            background: var(--xq-side); padding: 40px; border-radius: 24px; width: 100%; max-width: 400px;
             text-align: center; border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 20px 50px rgba(0,0,0,0.5);
         }
+
         .xq-input {
-            width: 100%; background: var(--xq-bg); border: 1px solid #2d3436; color: white;
-            padding: 15px; border-radius: 12px; margin: 10px 0; font-size: 1rem; transition: var(--transition);
+            width: 100%; background: #090b10; border: 1px solid #2d3436; color: white;
+            padding: 15px; border-radius: 12px; margin: 15px 0; font-size: 1rem; text-align: center;
         }
-        .xq-input:focus { border-color: var(--xq-primary); box-shadow: 0 0 10px rgba(88,101,242,0.3); }
+
         .btn-xq {
             width: 100%; padding: 15px; border-radius: 12px; border: none; background: var(--xq-grad);
-            color: white; font-weight: 800; cursor: pointer; transition: var(--transition); margin-top: 10px;
+            color: white; font-weight: 800; cursor: pointer; transition: 0.3s;
         }
+
         .btn-xq:hover { transform: translateY(-2px); filter: brightness(1.1); }
 
-        /* --- MAIN LAYOUT --- */
-        .app-container { display: flex; height: 100vh; opacity: 0; transition: 1s ease; }
-        .app-container.visible { opacity: 1; }
-
-        /* Sidebar - Server Icons */
-        .server-sidebar {
-            width: 72px; background: var(--xq-bg); display: flex; flex-direction: column; 
-            align-items: center; padding: 12px 0; gap: 8px; border-right: 1px solid rgba(255,255,255,0.05);
-        }
-        .server-btn {
-            width: 48px; height: 48px; background: var(--xq-card); border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; cursor: pointer;
-            transition: var(--transition); position: relative; font-weight: 800;
-        }
-        .server-btn:hover { border-radius: 15px; background: var(--xq-primary); }
-        .server-btn.active::before {
-            content: ''; position: absolute; left: -12px; width: 4px; height: 32px; background: white; border-radius: 0 4px 4px 0;
-        }
-
-        /* Contacts & Server Management */
-        .sub-sidebar { width: 240px; background: var(--xq-side); display: flex; flex-direction: column; }
-        .sidebar-header { padding: 20px; font-weight: 800; border-bottom: 1px solid rgba(0,0,0,0.2); }
-        
-        /* --- CHAT ENGINE --- */
-        .chat-area { flex: 1; display: flex; flex-direction: column; background: #0f1218; }
-        .chat-header { height: 64px; background: var(--xq-side); display: flex; align-items: center; padding: 0 20px; justify-content: space-between; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
-        .messages-log { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-        .msg-bubble { max-width: 70%; padding: 12px 16px; border-radius: 16px; font-size: 0.95rem; line-height: 1.5; }
-        .msg-sent { align-self: flex-end; background: var(--xq-grad); border-bottom-right-radius: 4px; }
-        .msg-received { align-self: flex-start; background: var(--xq-card); border-bottom-left-radius: 4px; }
-
-        /* --- ULTRA SERVER PANEL --- */
-        .server-panel {
-            width: 300px; background: var(--xq-side); border-left: 1px solid rgba(255,255,255,0.05);
-            padding: 20px; display: flex; flex-direction: column; gap: 20px;
-        }
-        .status-card { background: var(--xq-bg); padding: 15px; border-radius: 12px; border-left: 4px solid var(--xq-accent); }
-        .console-box {
-            background: #000; color: #0f0; font-family: monospace; font-size: 0.8rem;
-            padding: 10px; border-radius: 8px; height: 150px; overflow-y: auto;
-        }
-
-        /* reCAPTCHA Adjustment */
-        .g-recaptcha { margin: 15px 0; display: flex; justify-content: center; }
+        /* reCAPTCHA Layout */
+        #recaptcha-container { margin: 15px 0; display: flex; justify-content: center; }
     </style>
 </head>
 <body>
 
-    <div id="auth-overlay">
-        <div class="auth-card" id="phone-step">
-            <h1 style="color:var(--xq-primary)">XQ ULTRA</h1>
-            <p>Sistem Erişimi İçin Telefon Doğrulaması</p>
-            <input type="tel" id="phoneNumber" class="xq-input" placeholder="+90 5XX XXX XX XX">
-            <div id="recaptcha-container"></div> <button class="btn-xq" onclick="sendSMS()">SMS KODU GÖNDER</button>
-        </div>
-
-        <div class="auth-card" id="code-step" style="display:none;">
-            <h1>DOĞRULAMA</h1>
-            <p>6 Haneli Kodu Girin</p>
-            <input type="number" id="smsCode" class="xq-input" placeholder="000000" style="letter-spacing:15px; font-size:2rem;">
-            <button class="btn-xq" onclick="verifySMS()">SİSTEME GİRİŞ YAP</button>
-        </div>
+    <div class="auth-card" id="email-step">
+        <h1 style="color:var(--xq-primary)">XQ ULTRA</h1>
+        <p>E-posta adresinize giriş kodu gönderilecek</p>
+        <input type="email" id="userEmail" class="xq-input" placeholder="mail@example.com">
+        <div id="recaptcha-container"></div>
+        <button class="btn-xq" onclick="sendEmailOTP()">GİRİŞ KODU GÖNDER</button>
     </div>
 
-    <div class="app-container" id="mainApp">
-        <aside class="server-sidebar">
-            <div class="server-btn active">XQ</div>
-            <div class="server-btn">AI</div>
-            <div class="server-btn" style="color:var(--xq-accent)">+</div>
-        </aside>
-
-        <aside class="sub-sidebar">
-            <div class="sidebar-header">XQ ULTRA SERVER</div>
-            <div style="padding:10px;">
-                <div style="color:var(--xq-text-dim); font-size:0.7rem; text-transform:uppercase; margin-bottom:10px;">Kanallar</div>
-                <div style="padding:8px; background:rgba(255,255,255,0.05); border-radius:5px; cursor:pointer;"># genel-sohbet</div>
-                <div style="padding:8px; cursor:pointer; color:var(--xq-text-dim)"># sistem-loglari</div>
-                <div style="padding:8px; cursor:pointer; color:var(--xq-text-dim)"># duyurular</div>
-            </div>
-        </aside>
-
-        <main class="chat-area">
-            <header class="chat-header">
-                <div style="font-weight:800"># genel-sohbet</div>
-                <div style="display:flex; gap:15px;">
-                    <span title="Arama">📞</span>
-                    <span title="Görüntülü">📹</span>
-                    <span title="Üyeler">👥</span>
-                </div>
-            </header>
-            <div class="messages-log" id="chatBox">
-                </div>
-            <div style="padding:20px; background:var(--xq-side)">
-                <input type="text" id="msgInput" class="xq-input" placeholder="#genel-sohbet kanalına mesaj gönder..." style="margin:0;">
-            </div>
-        </main>
-
-        <section class="server-panel">
-            <h3>Sunucu Kontrol</h3>
-            <div class="status-card">
-                <div style="font-size:0.8rem; color:var(--xq-text-dim)">Sunucu Durumu</div>
-                <div style="font-weight:800; color:var(--xq-accent)">AKTİF (ULTRA MODE)</div>
-            </div>
-            <button class="btn-xq" style="background:var(--xq-danger)" onclick="restartServer()">SUNUCUYU YENİDEN BAŞLAT</button>
-            
-            <div style="font-size:0.8rem; font-weight:800;">SİSTEM KONSOLU</div>
-            <div class="console-box" id="consoleOut">
-                [SYSTEM] XQ Engine v2.0 başlatıldı...<br>
-                [DB] Firebase bağlantısı başarılı.<br>
-                [AUTH] reCAPTCHA doğrulama aktif.<br>
-            </div>
-        </section>
+    <div class="auth-card" id="otp-step" style="display:none;">
+        <h1>DOĞRULAMA</h1>
+        <p>E-postanızdaki kodu veya bağlantıyı onaylayın</p>
+        <div id="status-msg" style="color:var(--xq-accent); margin-bottom: 10px;">Giriş bekleniyor...</div>
+        <p style="font-size: 0.8rem; color: #949ba4;">Not: Firebase Email Link sistemi maildeki bağlantıya tıklamanızı gerektirir.</p>
+        <button class="btn-xq" style="background:#2d3436" onclick="location.reload()">Geri Dön</button>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
-        import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
-        import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-database.js";
+        import { getAuth, sendSignInLinkToEmail, isSignInWithEmailLink, signInWithEmailLink } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
 
-        // Senin Firebase Yapılandırman
         const firebaseConfig = {
             apiKey: "AIzaSyBQdsC8VuoBnFyOLWavV3C8GXomSzDXUzw",
             authDomain: "des-store-c93e0.firebaseapp.com",
-            databaseURL: "https://des-store-c93e0-default-rtdb.europe-west1.firebasedatabase.app",
             projectId: "des-store-c93e0",
             storageBucket: "des-store-c93e0.firebasestorage.app",
             messagingSenderId: "180864238268",
@@ -174,83 +70,51 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
-        const db = getDatabase(app);
-        auth.languageCode = 'tr';
 
-        // 1. ReCAPTCHA Tanımlama
-        window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
-            'size': 'normal', // Robot olmadığını kanıtlaması için 'normal' yaptık
-            'callback': (response) => { console.log("ReCAPTCHA Başarılı"); }
-        });
-
-        // 2. SMS Gönderme
-        window.sendSMS = function() {
-            const num = document.getElementById('phoneNumber').value;
-            if(!num) return alert("Numara gir!");
-
-            signInWithPhoneNumber(auth, num, window.recaptchaVerifier)
-                .then((result) => {
-                    window.confirmationResult = result;
-                    document.getElementById('phone-step').style.display = 'none';
-                    document.getElementById('code-step').style.display = 'block';
-                    logConsole("SMS Kodu gönderildi: " + num);
-                }).catch(err => alert("Hata: " + err.message));
+        const actionCodeSettings = {
+            url: window.location.href, // Kullanıcının tıklayınca döneceği yer
+            handleCodeInApp: true
         };
 
-        // 3. Kod Doğrulama
-        window.verifySMS = function() {
-            const code = document.getElementById('smsCode').value;
-            window.confirmationResult.confirm(code).then((result) => {
-                logConsole("Giriş Başarılı: " + result.user.phoneNumber);
-                document.getElementById('auth-overlay').style.fadeOut = "slow";
-                document.getElementById('auth-overlay').style.display = 'none';
-                document.getElementById('mainApp').classList.add('visible');
-                startChatEngine();
-            }).catch(err => alert("Kod yanlış!"));
-        };
+        // 1. Giriş Maili Gönder
+        window.sendEmailOTP = function() {
+            const email = document.getElementById('userEmail').value;
+            if(!email) return alert("Mail gir!");
 
-        // 4. Chat Motoru
-        function startChatEngine() {
-            const msgInput = document.getElementById('msgInput');
-            const chatBox = document.getElementById('chatBox');
-
-            // Mesaj Gönder
-            msgInput.addEventListener('keypress', (e) => {
-                if(e.key === 'Enter' && msgInput.value) {
-                    push(ref(db, 'chat/general'), {
-                        user: "Burak",
-                        text: msgInput.value,
-                        time: Date.now()
-                    });
-                    msgInput.value = "";
-                }
-            });
-
-            // Mesajları Oku
-            onValue(ref(db, 'chat/general'), (snap) => {
-                chatBox.innerHTML = "";
-                snap.forEach(child => {
-                    const data = child.val();
-                    const div = document.createElement('div');
-                    div.className = `msg-bubble ${data.user === 'Burak' ? 'msg-sent' : 'msg-received'}`;
-                    div.innerHTML = `<strong>${data.user}:</strong><br>${data.text}`;
-                    chatBox.appendChild(div);
+            sendSignInLinkToEmail(auth, email, actionCodeSettings)
+                .then(() => {
+                    // Mail adresini yerel depolamaya kaydet (güvenlik için gerekli)
+                    window.localStorage.setItem('emailForSignIn', email);
+                    
+                    document.getElementById('email-step').style.display = 'none';
+                    document.getElementById('otp-step').style.display = 'block';
+                    alert("Giriş bağlantısı mail adresine gönderildi!");
+                })
+                .catch((error) => {
+                    alert("Hata: " + error.message);
                 });
-                chatBox.scrollTop = chatBox.scrollHeight;
-            });
-        }
-
-        // Konsol Log Fonksiyonu
-        function logConsole(msg) {
-            const con = document.getElementById('consoleOut');
-            con.innerHTML += `> ${msg}<br>`;
-            con.scrollTop = con.scrollHeight;
-        }
-
-        window.restartServer = function() {
-            logConsole("Sunucu yeniden başlatılıyor...");
-            setTimeout(() => logConsole("Sistem Online."), 2000);
         };
+
+        // 2. Bağlantıyı Kontrol Et (Giriş Yapılmış mı?)
+        if (isSignInWithEmailLink(auth, window.location.href)) {
+            let email = window.localStorage.getItem('emailForSignIn');
+            
+            // Eğer kullanıcı cihaz değiştirirse maili tekrar sor
+            if (!email) {
+                email = window.prompt('Lütfen doğrulama için e-postanızı tekrar girin:');
+            }
+
+            signInWithEmailLink(auth, email, window.location.href)
+                .then((result) => {
+                    window.localStorage.removeItem('emailForSignIn');
+                    alert("XQ Ultra Sistemine Giriş Başarılı!");
+                    // Buradan ana panele yönlendir
+                    // window.location.href = "dashboard.html";
+                })
+                .catch((error) => {
+                    console.error("Giriş Hatası:", error);
+                });
+        }
     </script>
 </body>
 </html>
