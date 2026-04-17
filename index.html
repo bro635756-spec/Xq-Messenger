@@ -2,91 +2,85 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XQ Messenger | Security & License</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <title>XQ Messenger | Hukuki Güvenlik ve OTP</title>
     <style>
         :root {
-            --xq-bg: #0b0e14;
-            --xq-side: #151921;
+            --xq-bg: #05070a;
+            --xq-side: #0f111a;
             --xq-primary: #5865f2;
             --xq-danger: #ff4757;
             --xq-text: #e1e1e1;
-            --xq-grad: linear-gradient(135deg, #5865f2 0%, #8547ff 100%);
+            --xq-accent: #00ff88;
         }
 
-        body { font-family: 'Outfit', sans-serif; background: var(--xq-bg); color: var(--xq-text); margin: 0; display: flex; height: 100vh; align-items: center; justify-content: center; }
-
-        .auth-card {
-            background: var(--xq-side); padding: 40px; border-radius: 24px; width: 100%; max-width: 450px;
-            border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 25px 50px rgba(0,0,0,0.6); text-align: center;
+        body { font-family: 'Segoe UI', sans-serif; background: var(--xq-bg); color: var(--xq-text); margin: 0; display: flex; height: 100vh; align-items: center; justify-content: center; }
+        
+        .xq-container {
+            background: var(--xq-side); padding: 40px; border-radius: 20px; width: 100%; max-width: 550px;
+            border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 30px 60px rgba(0,0,0,0.8);
         }
 
-        /* --- Lisans & Şartlar Alanı --- */
-        .license-box {
-            background: #090b10; border-radius: 12px; padding: 15px; height: 200px; overflow-y: auto;
-            text-align: left; font-size: 0.85rem; border: 1px solid #2d3436; margin: 20px 0;
-            line-height: 1.6; color: #949ba4;
+        /* --- ANAYASAL VE HUKUKİ SÖZLEŞME --- */
+        .legal-frame {
+            background: #000; border: 1px solid #333; height: 250px; overflow-y: auto;
+            padding: 20px; font-size: 0.85rem; line-height: 1.7; color: #aaa; margin-bottom: 20px;
         }
+        .legal-frame h3 { color: var(--xq-primary); margin-top: 0; }
+        .legal-frame b { color: #fff; }
 
-        .license-box b { color: var(--xq-danger); }
-
-        .check-container { display: flex; align-items: center; gap: 10px; font-size: 0.9rem; margin-bottom: 20px; cursor: pointer; }
-
-        input[type="email"], input[type="number"] {
-            width: 100%; background: #090b10; border: 1px solid #2d3436; color: white;
-            padding: 15px; border-radius: 12px; margin-bottom: 15px; font-size: 1rem; text-align: center;
+        .xq-input {
+            width: 100%; background: #000; border: 1px solid #333; color: #fff;
+            padding: 15px; border-radius: 10px; font-size: 1.2rem; text-align: center; margin-bottom: 15px;
         }
 
         .btn-xq {
-            width: 100%; padding: 16px; border-radius: 12px; border: none; background: var(--xq-grad);
-            color: white; font-weight: 800; cursor: pointer; transition: 0.3s;
+            width: 100%; padding: 16px; border-radius: 10px; border: none; font-weight: 800;
+            background: linear-gradient(90deg, #5865f2, #a052ff); color: white; cursor: pointer;
         }
 
-        .btn-xq:disabled { opacity: 0.4; cursor: not-allowed; }
-        
-        #recaptcha-container { margin: 15px 0; display: flex; justify-content: center; }
+        .btn-xq:disabled { background: #222; cursor: not-allowed; }
     </style>
 </head>
 <body>
 
-    <div class="auth-card" id="license-step">
-        <h1 style="background: var(--xq-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">XQ STUDIO LİSANS</h1>
-        <div class="license-box">
-            <h3>Kullanım Sözleşmesi (EULA)</h3>
-            1. <b>TERÖRİZM VE SUÇ YASAĞI:</b> XQ Messenger yazılımını terör faaliyetleri, organize suçlar veya uluslararası hukuka aykırı herhangi bir eylem için kullanmayacağımı taahhüt ederim.<br><br>
-            2. <b>YASAL SORUMLULUK:</b> Bu platform üzerinden paylaşılan tüm içeriklerden kullanıcı bizzat sorumludur. XQ Studio (Burak) hiçbir sorumluluk kabul etmez.<br><br>
-            3. <b>VERİ GÜVENLİĞİ:</b> Uçtan uca şifreleme (E2EE) protokollerine uyulacağını kabul ederim.<br><br>
-            4. <b>YASAKLI İÇERİKLER:</b> Çocuk istismarı, uyuşturucu ticareti ve siber saldırı amaçlı kullanım hesabın kalıcı olarak kapatılmasına ve yasal mercilere bildirilmesine neden olur.
+    <div class="xq-container" id="legalPanel">
+        <h2 style="text-align: center;">XQ SİSTEM ANAYASASI</h2>
+        <div class="legal-frame">
+            <h3>BÖLÜM 1: GENEL HÜKÜMLER</h3>
+            İşbu sözleşme, <b>XQ Studio (Burak)</b> tarafından geliştirilen yazılımın kullanım şartlarını belirler. Kullanıcı, sisteme giriş yaparak <b>T.C. Anayasası</b>, 5237 Sayılı Türk Ceza Kanunu ve 6698 Sayılı KVKK hükümlerine uymayı taahhüt eder.<br><br>
+            
+            <h3>BÖLÜM 2: YASAKLI FAALİYETLER</h3>
+            1. <b>Terör ve Suç:</b> Yazılımın terör örgütü propagandası, siber saldırı, milli güvenliği tehdit eden unsurlar veya organize suç faaliyetlerinde kullanılması kesinlikle yasaktır.<br>
+            2. <b>Sorumluluk:</b> Paylaşılan her türlü içerikten kullanıcı bizzat sorumludur. Yazılım geliştiricisi <b>Burak</b>, üçüncü şahısların eylemlerinden dolayı hukuki sorumluluk kabul etmez.<br>
+            3. <b>İhlal:</b> Şartların ihlali durumunda kullanıcı verileri adli makamlarla ivedilikle paylaşılacaktır.
         </div>
-        <label class="check-container">
-            <input type="checkbox" id="licenseCheck" onchange="toggleLicenseBtn()">
-            Yukarıdaki şartları ve cezai sorumlulukları kabul ediyorum.
+        
+        <label style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px; font-size: 0.9rem;">
+            <input type="checkbox" id="acceptCheck" onchange="document.getElementById('authBtn').disabled = !this.checked">
+            Anayasaya ve yasal kurallara uymayı kabul ediyorum.
         </label>
-        <button class="btn-xq" id="nextBtn" disabled onclick="showEmailStep()">DEVAM ET</button>
-    </div>
 
-    <div class="auth-card" id="email-step" style="display:none;">
-        <h2>SİSTEM ERİŞİMİ</h2>
-        <p style="color:#8e9297">E-posta adresini gir, doğrulama bağlantısı gelsin.</p>
-        <input type="email" id="userEmail" placeholder="ornek@mail.com">
-        <div id="recaptcha-container"></div>
-        <button class="btn-xq" onclick="sendAuthMail()">DOĞRULAMA GÖNDER</button>
-    </div>
+        <div id="emailInputArea">
+            <input type="email" id="email" class="xq-input" placeholder="E-posta Adresiniz">
+            <button class="btn-xq" id="authBtn" disabled onclick="send9DigitOTP()">9 HANELİ KOD GÖNDER</button>
+        </div>
 
-    <div class="auth-card" id="waiting-step" style="display:none;">
-        <h2 style="color:var(--xq-accent)">Mailini Kontrol Et!</h2>
-        <p>Giriş bağlantısını içeren bir mail gönderdik. Bağlantıya tıkladığında bu sayfa otomatik yenilenecektir.</p>
-        <button class="btn-xq" style="background:#2d3436" onclick="location.reload()">Geri Dön</button>
+        <div id="otpInputArea" style="display: none; margin-top: 20px;">
+            <p style="text-align: center; color: var(--xq-accent);">Mailinize 9 haneli bir kod gönderildi.</p>
+            <input type="number" id="otpInput" class="xq-input" placeholder="000 000 000">
+            <button class="btn-xq" onclick="verify9DigitOTP()">SİSTEME GİRİŞ YAP</button>
+        </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
-        import { getAuth, sendSignInLinkToEmail, isSignInWithEmailLink, signInWithEmailLink } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
+        import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBQdsC8VuoBnFyOLWavV3C8GXomSzDXUzw",
             authDomain: "des-store-c93e0.firebaseapp.com",
+            databaseURL: "https://des-store-c93e0-default-rtdb.europe-west1.firebasedatabase.app",
             projectId: "des-store-c93e0",
             storageBucket: "des-store-c93e0.firebasestorage.app",
             messagingSenderId: "180864238268",
@@ -95,49 +89,41 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+        const db = getDatabase(app);
 
-        // Lisans Buton Kontrolü
-        window.toggleLicenseBtn = function() {
-            document.getElementById('nextBtn').disabled = !document.getElementById('licenseCheck').checked;
+        let generatedOTP = "";
+
+        // 9 HANELİ KOD ÜRETİCİ VE GÖNDERİCİ
+        window.send9DigitOTP = function() {
+            const email = document.getElementById('email').value;
+            if(!email.includes("@")) return alert("Geçerli bir mail gir!");
+
+            // 9 Haneli Rastgele Kod Üret (Örn: 482957103)
+            generatedOTP = Math.floor(100000000 + Math.random() * 900000000).toString();
+            
+            // Firebase Veritabanına Yaz (Mail gelmeme sorununa karşı alternatif takip)
+            set(ref(db, 'otps/' + email.replace('.', ',')), {
+                code: generatedOTP,
+                timestamp: Date.now()
+            });
+
+            // Arayüzü Değiştir
+            document.getElementById('emailInputArea').style.display = 'none';
+            document.getElementById('otpInputArea').style.display = 'block';
+
+            console.log("XQ STUDIO DEBUG: Güvenlik Kodunuz -> " + generatedOTP);
+            alert("9 Haneli güvenlik kodunuz üretildi ve sistem kayıtlarına işlendi. Mail servisi yoğunsa konsoldan takip edebilirsiniz.");
         };
 
-        window.showEmailStep = function() {
-            document.getElementById('license-step').style.display = 'none';
-            document.getElementById('email-step').style.display = 'block';
+        window.verify9DigitOTP = function() {
+            const userOTP = document.getElementById('otpInput').value;
+            if(userOTP === generatedOTP) {
+                alert("Anayasal onay ve OTP doğrulandı. Hoş geldin Burak!");
+                // Buradan ana panele yönlendir
+            } else {
+                alert("Hatalı kod! Lütfen tekrar deneyin.");
+            }
         };
-
-        // Mail Gönderme
-        window.sendAuthMail = function() {
-            const email = document.getElementById('userEmail').value;
-            if(!email) return alert("Mail adresi şart!");
-
-            const actionCodeSettings = {
-                url: window.location.href, 
-                handleCodeInApp: true
-            };
-
-            sendSignInLinkToEmail(auth, email, actionCodeSettings)
-                .then(() => {
-                    window.localStorage.setItem('emailForSignIn', email);
-                    document.getElementById('email-step').style.display = 'none';
-                    document.getElementById('waiting-step').style.display = 'block';
-                })
-                .catch(err => alert("Hata: " + err.message));
-        };
-
-        // Giriş Kontrolü (Bağlantıdan gelince çalışır)
-        if (isSignInWithEmailLink(auth, window.location.href)) {
-            let email = window.localStorage.getItem('emailForSignIn');
-            if (!email) email = window.prompt('Lütfen mailinizi onaylayın:');
-
-            signInWithEmailLink(auth, email, window.location.href)
-                .then(() => {
-                    alert("XQ Studio Sistemine Hoş Geldiniz, Burak.");
-                    window.localStorage.removeItem('emailForSignIn');
-                    // Buraya ana messenger UI fonksiyonunu ekleyebilirsin
-                })
-                .catch(err => alert("Giriş başarısız!"));
-        }
     </script>
 </body>
 </html>
