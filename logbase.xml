@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LogBase>
+    <Config>
+        <AdminMail>bro635756@gmail.com</AdminMail>
+        <AlertLevel>High</AlertLevel>
+    </Config>
+    <Blacklist>
+        <Word>terör</Word>
+        <Word>darbe</Word>
+        <Word>tecavüz</Word>
+        <Word>taciz</Word>
+    </Blacklist>
+</LogBase>
