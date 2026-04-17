@@ -2,56 +2,81 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>XQ Messenger | Email OTP Ultra</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XQ Messenger | Security & License</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --xq-bg: #090b10;
-            --xq-side: #12161f;
+            --xq-bg: #0b0e14;
+            --xq-side: #151921;
             --xq-primary: #5865f2;
-            --xq-accent: #00d997;
-            --xq-text: #f1f1f1;
-            --xq-grad: linear-gradient(135deg, #5865f2 0%, #a052ff 100%);
+            --xq-danger: #ff4757;
+            --xq-text: #e1e1e1;
+            --xq-grad: linear-gradient(135deg, #5865f2 0%, #8547ff 100%);
         }
 
-        body { font-family: 'Outfit', sans-serif; background: var(--xq-bg); color: var(--xq-text); margin: 0; display: flex; height: 100vh; justify-content: center; align-items: center; }
+        body { font-family: 'Outfit', sans-serif; background: var(--xq-bg); color: var(--xq-text); margin: 0; display: flex; height: 100vh; align-items: center; justify-content: center; }
 
         .auth-card {
-            background: var(--xq-side); padding: 40px; border-radius: 24px; width: 100%; max-width: 400px;
-            text-align: center; border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            background: var(--xq-side); padding: 40px; border-radius: 24px; width: 100%; max-width: 450px;
+            border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 25px 50px rgba(0,0,0,0.6); text-align: center;
         }
 
-        .xq-input {
+        /* --- Lisans & Şartlar Alanı --- */
+        .license-box {
+            background: #090b10; border-radius: 12px; padding: 15px; height: 200px; overflow-y: auto;
+            text-align: left; font-size: 0.85rem; border: 1px solid #2d3436; margin: 20px 0;
+            line-height: 1.6; color: #949ba4;
+        }
+
+        .license-box b { color: var(--xq-danger); }
+
+        .check-container { display: flex; align-items: center; gap: 10px; font-size: 0.9rem; margin-bottom: 20px; cursor: pointer; }
+
+        input[type="email"], input[type="number"] {
             width: 100%; background: #090b10; border: 1px solid #2d3436; color: white;
-            padding: 15px; border-radius: 12px; margin: 15px 0; font-size: 1rem; text-align: center;
+            padding: 15px; border-radius: 12px; margin-bottom: 15px; font-size: 1rem; text-align: center;
         }
 
         .btn-xq {
-            width: 100%; padding: 15px; border-radius: 12px; border: none; background: var(--xq-grad);
+            width: 100%; padding: 16px; border-radius: 12px; border: none; background: var(--xq-grad);
             color: white; font-weight: 800; cursor: pointer; transition: 0.3s;
         }
 
-        .btn-xq:hover { transform: translateY(-2px); filter: brightness(1.1); }
-
-        /* reCAPTCHA Layout */
+        .btn-xq:disabled { opacity: 0.4; cursor: not-allowed; }
+        
         #recaptcha-container { margin: 15px 0; display: flex; justify-content: center; }
     </style>
 </head>
 <body>
 
-    <div class="auth-card" id="email-step">
-        <h1 style="color:var(--xq-primary)">XQ ULTRA</h1>
-        <p>E-posta adresinize giriş kodu gönderilecek</p>
-        <input type="email" id="userEmail" class="xq-input" placeholder="mail@example.com">
-        <div id="recaptcha-container"></div>
-        <button class="btn-xq" onclick="sendEmailOTP()">GİRİŞ KODU GÖNDER</button>
+    <div class="auth-card" id="license-step">
+        <h1 style="background: var(--xq-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">XQ STUDIO LİSANS</h1>
+        <div class="license-box">
+            <h3>Kullanım Sözleşmesi (EULA)</h3>
+            1. <b>TERÖRİZM VE SUÇ YASAĞI:</b> XQ Messenger yazılımını terör faaliyetleri, organize suçlar veya uluslararası hukuka aykırı herhangi bir eylem için kullanmayacağımı taahhüt ederim.<br><br>
+            2. <b>YASAL SORUMLULUK:</b> Bu platform üzerinden paylaşılan tüm içeriklerden kullanıcı bizzat sorumludur. XQ Studio (Burak) hiçbir sorumluluk kabul etmez.<br><br>
+            3. <b>VERİ GÜVENLİĞİ:</b> Uçtan uca şifreleme (E2EE) protokollerine uyulacağını kabul ederim.<br><br>
+            4. <b>YASAKLI İÇERİKLER:</b> Çocuk istismarı, uyuşturucu ticareti ve siber saldırı amaçlı kullanım hesabın kalıcı olarak kapatılmasına ve yasal mercilere bildirilmesine neden olur.
+        </div>
+        <label class="check-container">
+            <input type="checkbox" id="licenseCheck" onchange="toggleLicenseBtn()">
+            Yukarıdaki şartları ve cezai sorumlulukları kabul ediyorum.
+        </label>
+        <button class="btn-xq" id="nextBtn" disabled onclick="showEmailStep()">DEVAM ET</button>
     </div>
 
-    <div class="auth-card" id="otp-step" style="display:none;">
-        <h1>DOĞRULAMA</h1>
-        <p>E-postanızdaki kodu veya bağlantıyı onaylayın</p>
-        <div id="status-msg" style="color:var(--xq-accent); margin-bottom: 10px;">Giriş bekleniyor...</div>
-        <p style="font-size: 0.8rem; color: #949ba4;">Not: Firebase Email Link sistemi maildeki bağlantıya tıklamanızı gerektirir.</p>
+    <div class="auth-card" id="email-step" style="display:none;">
+        <h2>SİSTEM ERİŞİMİ</h2>
+        <p style="color:#8e9297">E-posta adresini gir, doğrulama bağlantısı gelsin.</p>
+        <input type="email" id="userEmail" placeholder="ornek@mail.com">
+        <div id="recaptcha-container"></div>
+        <button class="btn-xq" onclick="sendAuthMail()">DOĞRULAMA GÖNDER</button>
+    </div>
+
+    <div class="auth-card" id="waiting-step" style="display:none;">
+        <h2 style="color:var(--xq-accent)">Mailini Kontrol Et!</h2>
+        <p>Giriş bağlantısını içeren bir mail gönderdik. Bağlantıya tıkladığında bu sayfa otomatik yenilenecektir.</p>
         <button class="btn-xq" style="background:#2d3436" onclick="location.reload()">Geri Dön</button>
     </div>
 
@@ -71,49 +96,47 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
 
-        const actionCodeSettings = {
-            url: window.location.href, // Kullanıcının tıklayınca döneceği yer
-            handleCodeInApp: true
+        // Lisans Buton Kontrolü
+        window.toggleLicenseBtn = function() {
+            document.getElementById('nextBtn').disabled = !document.getElementById('licenseCheck').checked;
         };
 
-        // 1. Giriş Maili Gönder
-        window.sendEmailOTP = function() {
+        window.showEmailStep = function() {
+            document.getElementById('license-step').style.display = 'none';
+            document.getElementById('email-step').style.display = 'block';
+        };
+
+        // Mail Gönderme
+        window.sendAuthMail = function() {
             const email = document.getElementById('userEmail').value;
-            if(!email) return alert("Mail gir!");
+            if(!email) return alert("Mail adresi şart!");
+
+            const actionCodeSettings = {
+                url: window.location.href, 
+                handleCodeInApp: true
+            };
 
             sendSignInLinkToEmail(auth, email, actionCodeSettings)
                 .then(() => {
-                    // Mail adresini yerel depolamaya kaydet (güvenlik için gerekli)
                     window.localStorage.setItem('emailForSignIn', email);
-                    
                     document.getElementById('email-step').style.display = 'none';
-                    document.getElementById('otp-step').style.display = 'block';
-                    alert("Giriş bağlantısı mail adresine gönderildi!");
+                    document.getElementById('waiting-step').style.display = 'block';
                 })
-                .catch((error) => {
-                    alert("Hata: " + error.message);
-                });
+                .catch(err => alert("Hata: " + err.message));
         };
 
-        // 2. Bağlantıyı Kontrol Et (Giriş Yapılmış mı?)
+        // Giriş Kontrolü (Bağlantıdan gelince çalışır)
         if (isSignInWithEmailLink(auth, window.location.href)) {
             let email = window.localStorage.getItem('emailForSignIn');
-            
-            // Eğer kullanıcı cihaz değiştirirse maili tekrar sor
-            if (!email) {
-                email = window.prompt('Lütfen doğrulama için e-postanızı tekrar girin:');
-            }
+            if (!email) email = window.prompt('Lütfen mailinizi onaylayın:');
 
             signInWithEmailLink(auth, email, window.location.href)
-                .then((result) => {
+                .then(() => {
+                    alert("XQ Studio Sistemine Hoş Geldiniz, Burak.");
                     window.localStorage.removeItem('emailForSignIn');
-                    alert("XQ Ultra Sistemine Giriş Başarılı!");
-                    // Buradan ana panele yönlendir
-                    // window.location.href = "dashboard.html";
+                    // Buraya ana messenger UI fonksiyonunu ekleyebilirsin
                 })
-                .catch((error) => {
-                    console.error("Giriş Hatası:", error);
-                });
+                .catch(err => alert("Giriş başarısız!"));
         }
     </script>
 </body>
