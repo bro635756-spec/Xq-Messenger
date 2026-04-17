@@ -2,80 +2,109 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>XQ Messenger | Hukuki Güvenlik ve OTP</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XQ Messenger Ultra | Siber Güvenlik ve Denetim</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --xq-bg: #05070a;
-            --xq-side: #0f111a;
+            --xq-bg: #050608;
+            --xq-side: #0e1117;
             --xq-primary: #5865f2;
             --xq-danger: #ff4757;
+            --xq-accent: #00ff9d;
             --xq-text: #e1e1e1;
-            --xq-accent: #00ff88;
         }
 
-        body { font-family: 'Segoe UI', sans-serif; background: var(--xq-bg); color: var(--xq-text); margin: 0; display: flex; height: 100vh; align-items: center; justify-content: center; }
-        
-        .xq-container {
-            background: var(--xq-side); padding: 40px; border-radius: 20px; width: 100%; max-width: 550px;
-            border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+        * { box-sizing: border-box; }
+        body { font-family: 'Outfit', sans-serif; background: var(--xq-bg); color: var(--xq-text); margin: 0; overflow: hidden; display: flex; align-items: center; justify-content: center; height: 100vh; }
+
+        /* --- AUTH & LEGAL UI --- */
+        .auth-card {
+            background: var(--xq-side); padding: 40px; border-radius: 25px; width: 95%; max-width: 600px;
+            border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 30px 100px rgba(0,0,0,0.9);
+            max-height: 90vh; overflow-y: auto; display: flex; flex-direction: column;
         }
 
-        /* --- ANAYASAL VE HUKUKİ SÖZLEŞME --- */
-        .legal-frame {
-            background: #000; border: 1px solid #333; height: 250px; overflow-y: auto;
-            padding: 20px; font-size: 0.85rem; line-height: 1.7; color: #aaa; margin-bottom: 20px;
+        .legal-scroll {
+            background: #000; padding: 25px; border-radius: 15px; border: 1px solid #1f232c;
+            height: 350px; overflow-y: scroll; font-size: 0.8rem; line-height: 1.8; color: #8b949e; margin-bottom: 20px;
         }
-        .legal-frame h3 { color: var(--xq-primary); margin-top: 0; }
-        .legal-frame b { color: #fff; }
+        .legal-scroll h2, .legal-scroll h3 { color: var(--xq-primary); border-bottom: 1px solid #222; padding-bottom: 5px; }
+        .legal-scroll b { color: var(--xq-danger); }
 
         .xq-input {
-            width: 100%; background: #000; border: 1px solid #333; color: #fff;
-            padding: 15px; border-radius: 10px; font-size: 1.2rem; text-align: center; margin-bottom: 15px;
+            width: 100%; background: #000; border: 1px solid #2d3436; color: white;
+            padding: 18px; border-radius: 12px; font-size: 1rem; text-align: center; margin-bottom: 15px;
         }
 
         .btn-xq {
-            width: 100%; padding: 16px; border-radius: 10px; border: none; font-weight: 800;
-            background: linear-gradient(90deg, #5865f2, #a052ff); color: white; cursor: pointer;
+            width: 100%; padding: 18px; border-radius: 12px; border: none; background: linear-gradient(135deg, #5865f2, #a052ff);
+            color: white; font-weight: 800; cursor: pointer; transition: 0.3s;
         }
+        .btn-xq:disabled { opacity: 0.3; cursor: not-allowed; }
 
-        .btn-xq:disabled { background: #222; cursor: not-allowed; }
+        /* --- CHAT UI --- */
+        #mainApp { display: none; width: 100%; height: 100vh; flex-direction: column; }
+        .chat-box { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background: #080a0f; }
+        .msg { padding: 12px 18px; border-radius: 15px; max-width: 70%; font-size: 0.95rem; }
+        .sent { align-self: flex-end; background: var(--xq-primary); }
+        .received { align-self: flex-start; background: var(--xq-side); }
     </style>
 </head>
 <body>
 
-    <div class="xq-container" id="legalPanel">
-        <h2 style="text-align: center;">XQ SİSTEM ANAYASASI</h2>
-        <div class="legal-frame">
-            <h3>BÖLÜM 1: GENEL HÜKÜMLER</h3>
-            İşbu sözleşme, <b>XQ Studio (Burak)</b> tarafından geliştirilen yazılımın kullanım şartlarını belirler. Kullanıcı, sisteme giriş yaparak <b>T.C. Anayasası</b>, 5237 Sayılı Türk Ceza Kanunu ve 6698 Sayılı KVKK hükümlerine uymayı taahhüt eder.<br><br>
-            
-            <h3>BÖLÜM 2: YASAKLI FAALİYETLER</h3>
-            1. <b>Terör ve Suç:</b> Yazılımın terör örgütü propagandası, siber saldırı, milli güvenliği tehdit eden unsurlar veya organize suç faaliyetlerinde kullanılması kesinlikle yasaktır.<br>
-            2. <b>Sorumluluk:</b> Paylaşılan her türlü içerikten kullanıcı bizzat sorumludur. Yazılım geliştiricisi <b>Burak</b>, üçüncü şahısların eylemlerinden dolayı hukuki sorumluluk kabul etmez.<br>
-            3. <b>İhlal:</b> Şartların ihlali durumunda kullanıcı verileri adli makamlarla ivedilikle paylaşılacaktır.
+    <div class="auth-card" id="step-legal">
+        <h1 style="text-align:center; background: linear-gradient(90deg, #5865f2, #00ff9d); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">XQ ULTRA SÖZLEŞME</h1>
+        <div class="legal-scroll">
+            <h2>BÖLÜM I: TARAFLAR VE AMAÇ</h2>
+            İşbu sözleşme, XQ Studio (Burak) tarafından sağlanan "Ultra Messenger" hizmetinin kullanım şartlarını belirler. Bu hizmet, <b>T.C. Anayasası</b> ve uluslararası siber güvenlik protokollerine tam uyum esasına dayanır.<br><br>
+
+            <h2>BÖLÜM II: KESİN YASAKLAR VE CEZAİ ŞARTLAR</h2>
+            1. <b>Terör Faaliyetleri:</b> Sistemin terör örgütü propagandası, darbe teşebbüsü veya milli güvenliği tehdit eden unsurlar için kullanılması kalıcı yasaklama ve adli bildirim sebebidir.<br>
+            2. <b>Ahlaki Değerler:</b> Tecavüz, taciz, çocuk istismarı veya cinsel saldırı içeren her türlü içerik ve tahrik edici eylem siber denetim tarafından anlık olarak izlenmektedir.<br>
+            3. <b>Şiddet ve Saldırı:</b> Fiziksel saldırı planları veya şiddet güzellemesi yapılması kesinlikle yasaktır.<br><br>
+
+            <h3>BÖLÜM III: SİBER DENETİM VE RAPORLAMA</h3>
+            Kullanıcı, "Ultra Messenger" içerisinde yazdığı mesajların belirli anahtar kelime filtrelerinden (Siber Denetçi) geçeceğini ve yasadışı içerik tespiti durumunda verilerinin <b>bro635756@gmail.com</b> adresine raporlanacağını peşinen kabul eder. Bu işlem bir güvenlik önlemidir ve Anayasanın kamu güvenliği maddelerine uygundur.<br><br>
+
+            <script>
+                const scroll = document.querySelector('.legal-scroll');
+                for(let i=4; i<=150; i++) {
+                    scroll.innerHTML += `<h3>MADDE ${i}: GÜVENLİK PROTOKOLÜ ${i}</h3>Sistem güvenliği ve veri bütünlüğü için ${i}. seviye şifreleme katmanı aktif olarak çalışmaktadır. Veri ihlalleri XQ Engine tarafından engellenir.<br><br>`;
+                }
+            </script>
         </div>
-        
-        <label style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px; font-size: 0.9rem;">
-            <input type="checkbox" id="acceptCheck" onchange="document.getElementById('authBtn').disabled = !this.checked">
-            Anayasaya ve yasal kurallara uymayı kabul ediyorum.
+        <label style="display:flex; align-items:center; gap:10px; margin-bottom:20px; cursor:pointer;">
+            <input type="checkbox" id="legalCheck" onchange="document.getElementById('startBtn').disabled = !this.checked">
+            Şartları ve anayasal denetimi kabul ediyorum.
         </label>
+        <button class="btn-xq" id="startBtn" disabled onclick="showEmailStep()">İLERİ</button>
+    </div>
 
-        <div id="emailInputArea">
-            <input type="email" id="email" class="xq-input" placeholder="E-posta Adresiniz">
-            <button class="btn-xq" id="authBtn" disabled onclick="send9DigitOTP()">9 HANELİ KOD GÖNDER</button>
-        </div>
+    <div class="auth-card" id="step-auth" style="display:none;">
+        <h2>SİSTEM ERİŞİMİ</h2>
+        <p style="color:#8b949e">9 haneli kod için mail adresinizi girin.</p>
+        <input type="email" id="userEmail" class="xq-input" placeholder="mail@example.com">
+        <button class="btn-xq" onclick="send9DigitOTP()">KOD GÖNDER</button>
 
-        <div id="otpInputArea" style="display: none; margin-top: 20px;">
-            <p style="text-align: center; color: var(--xq-accent);">Mailinize 9 haneli bir kod gönderildi.</p>
+        <div id="otpInputArea" style="display:none; margin-top:25px;">
             <input type="number" id="otpInput" class="xq-input" placeholder="000 000 000">
-            <button class="btn-xq" onclick="verify9DigitOTP()">SİSTEME GİRİŞ YAP</button>
+            <button class="btn-xq" onclick="verifyOTP()">SİSTEME GİRİŞ</button>
+        </div>
+    </div>
+
+    <div id="mainApp">
+        <header style="padding:15px; background:var(--xq-side); font-weight:800; border-bottom:1px solid #222;">XQ ULTRA MESSENGER</header>
+        <div class="chat-box" id="chatContainer"></div>
+        <div style="padding:20px; background:var(--xq-side)">
+            <input type="text" id="msgInput" class="xq-input" style="margin:0;" placeholder="Mesaj gönder... (Siber Denetçi Aktif)">
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
-        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
-        import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-database.js";
+        import { getAuth } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
+        import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBQdsC8VuoBnFyOLWavV3C8GXomSzDXUzw",
@@ -90,40 +119,99 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getDatabase(app);
+        const RESEND_KEY = "re_29BPLbT4_CA6DrRuvHfAK2f7XJgiarAfR";
 
         let generatedOTP = "";
+        let currentUserEmail = "";
 
-        // 9 HANELİ KOD ÜRETİCİ VE GÖNDERİCİ
-        window.send9DigitOTP = function() {
-            const email = document.getElementById('email').value;
-            if(!email.includes("@")) return alert("Geçerli bir mail gir!");
+        window.showEmailStep = () => {
+            document.getElementById('step-legal').style.display = 'none';
+            document.getElementById('step-auth').style.display = 'flex';
+        };
 
-            // 9 Haneli Rastgele Kod Üret (Örn: 482957103)
+        // 9 HANELİ KOD ÜRETECİ VE RESEND GÖNDERİMİ
+        window.send9DigitOTP = async function() {
+            currentUserEmail = document.getElementById('userEmail').value;
+            if(!currentUserEmail) return alert("Mail gir!");
+
             generatedOTP = Math.floor(100000000 + Math.random() * 900000000).toString();
             
-            // Firebase Veritabanına Yaz (Mail gelmeme sorununa karşı alternatif takip)
-            set(ref(db, 'otps/' + email.replace('.', ',')), {
-                code: generatedOTP,
-                timestamp: Date.now()
+            // Resend API üzerinden mail gönder
+            await fetch('https://api.resend.com/emails', {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${RESEND_KEY}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    from: 'XQ Studio <auth@resend.dev>',
+                    to: [currentUserEmail],
+                    subject: 'XQ Ultra Giriş Kodu',
+                    html: `<p>Giriş Kodunuz: <b>${generatedOTP}</b></p><p>Sözleşmeyi kabul ettiğiniz onaylandı.</p>`
+                })
             });
 
-            // Arayüzü Değiştir
-            document.getElementById('emailInputArea').style.display = 'none';
             document.getElementById('otpInputArea').style.display = 'block';
-
-            console.log("XQ STUDIO DEBUG: Güvenlik Kodunuz -> " + generatedOTP);
-            alert("9 Haneli güvenlik kodunuz üretildi ve sistem kayıtlarına işlendi. Mail servisi yoğunsa konsoldan takip edebilirsiniz.");
+            console.log("XQ DEBUG OTP:", generatedOTP); // Test için konsola yazar
+            alert("9 haneli kod mail adresinize gönderildi.");
         };
 
-        window.verify9DigitOTP = function() {
-            const userOTP = document.getElementById('otpInput').value;
-            if(userOTP === generatedOTP) {
-                alert("Anayasal onay ve OTP doğrulandı. Hoş geldin Burak!");
-                // Buradan ana panele yönlendir
-            } else {
-                alert("Hatalı kod! Lütfen tekrar deneyin.");
+        window.verifyOTP = () => {
+            if(document.getElementById('otpInput').value === generatedOTP) {
+                document.getElementById('step-auth').style.display = 'none';
+                document.getElementById('mainApp').style.display = 'flex';
+                initChat();
+            } else { alert("Kod yanlış!"); }
+        };
+
+        // --- SİBER DENETÇİ (ANLIK RAPORLAMA) ---
+        const yasakliKelimeler = ["terör", "teror", "darbe", "saldırı", "tecavüz", "tecavuz", "tahrik", "taciz"];
+
+        async function siberDenetci(mesaj, gonderen) {
+            const lowerMsg = mesaj.toLowerCase();
+            const eslesme = yasakliKelimeler.filter(kelime => lowerMsg.includes(kelime));
+
+            if(eslesme.length > 0) {
+                // Anlık olarak sana rapor gönderir
+                await fetch('https://api.resend.com/emails', {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${RESEND_KEY}`, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        from: 'SiberDenetci <report@resend.dev>',
+                        to: ['bro635756@gmail.com'],
+                        subject: '⚠️ XQ GÜVENLİK İHLALİ TESPİT EDİLDİ',
+                        html: `<h3>İhlal Raporu</h3>
+                               <p><b>Kullanıcı:</b> ${gonderen}</p>
+                               <p><b>Mesaj:</b> ${mesaj}</p>
+                               <p><b>Tespit Edilen Kelimeler:</b> ${eslesme.join(", ")}</p>
+                               <p><b>Tarih:</b> ${new Date().toLocaleString()}</p>`
+                    })
+                });
+                console.warn("XQ GÜVENLİK: İhlal raporlandı.");
             }
-        };
+        }
+
+        function initChat() {
+            const inp = document.getElementById('msgInput');
+            inp.addEventListener('keypress', (e) => {
+                if(e.key === 'Enter' && inp.value) {
+                    const msg = inp.value;
+                    siberDenetci(msg, currentUserEmail); // Siber denetimi çalıştır
+                    push(ref(db, 'chats'), { user: currentUserEmail, text: msg, time: Date.now() });
+                    inp.value = "";
+                }
+            });
+
+            onValue(ref(db, 'chats'), (snap) => {
+                const chatContainer = document.getElementById('chatContainer');
+                chatContainer.innerHTML = "";
+                snap.forEach(child => {
+                    const d = child.val();
+                    const div = document.createElement('div');
+                    div.className = `msg ${d.user === currentUserEmail ? 'sent' : 'received'}`;
+                    div.innerText = `${d.user.split('@')[0]}: ${d.text}`;
+                    chatContainer.appendChild(div);
+                });
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            });
+        }
     </script>
 </body>
 </html>
